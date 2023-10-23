@@ -11,13 +11,18 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-void drawJapanFlag(HDC hdc, int left, int top);
+HFONT hFont;
+TCHAR str[100];
+
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+void drawJapanFlag(HDC hdc, int left, int top);
+void drawJapanText(HDC hdc, int left, int top);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -125,8 +130,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
-    {
+    switch (message) {
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
@@ -144,12 +148,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+    case WM_CREATE:
+        hFont = CreateFont(
+            30, 40, 0, 0,
+            FW_DONTCARE,
+            FALSE, FALSE, FALSE,
+            DEFAULT_CHARSET,
+            OUT_DEFAULT_PRECIS,
+            CLIP_DEFAULT_PRECIS,
+            DEFAULT_QUALITY,
+            DEFAULT_PITCH | FF_DONTCARE,
+            TEXT("HGçsèëëÃ")
+        );
+        break;
+    case WM_CLOSE:
+        DeleteObject(hFont);
+        DestroyWindow(hWnd);
+        break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
             drawJapanFlag(hdc, 20, 20);
+            drawJapanText(hdc, 135, 290);
             EndPaint(hWnd, &ps);
         }
         break;
@@ -193,4 +215,23 @@ void drawJapanFlag(HDC hdc, int left, int top) {
     SetDCBrushColor(hdc, RGB(188, 0, 45));
     Ellipse(hdc, left + 120, top + 53, left + 160 + 120, top + 160 + 53);
 
+}
+
+void drawJapanText(HDC hdc, int left, int top) {
+    hFont = CreateFont(
+        55, 30, 0, 0,
+        FW_DONTCARE,
+        FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS,
+        DEFAULT_QUALITY,
+        DEFAULT_PITCH | FF_DONTCARE,
+        TEXT("Arial Rounded MT Bold")
+    );
+    SetBkMode(hdc, TRANSPARENT);
+    SetTextColor(hdc, RGB(255, 0, 0));
+    SelectObject(hdc, hFont);
+    lstrcpy(str, TEXT("Japan"));
+    TextOut(hdc, left, top, str, lstrlen(str));
 }

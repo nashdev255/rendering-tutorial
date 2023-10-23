@@ -149,7 +149,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
-            drawJapanFlag(hdc, 10, 10);
+            drawJapanFlag(hdc, 20, 20);
             EndPaint(hWnd, &ps);
         }
         break;
@@ -187,10 +187,10 @@ void drawJapanFlag(HDC hdc, int left, int top) {
     SelectObject(hdc, GetStockObject(DC_BRUSH));
     SetDCPenColor(hdc, RGB(0, 0, 0));
     SetDCBrushColor(hdc, RGB(255, 255, 255));
-    Rectangle(hdc, 0, 0, 400, 266);
+    Rectangle(hdc, left + 0, top + 0, left + 400, top + 266);
 
     SetDCPenColor(hdc, RGB(188, 0, 45));
     SetDCBrushColor(hdc, RGB(188, 0, 45));
-    Ellipse(hdc, 120, 53, 160 + 120, 160 + 53);
+    Ellipse(hdc, left + 120, top + 53, left + 160 + 120, top + 160 + 53);
 
 }

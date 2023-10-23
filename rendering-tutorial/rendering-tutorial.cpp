@@ -11,6 +11,8 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
+void drawJapanFlag(HDC hdc, int left, int top);
+
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -147,6 +149,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
+            drawJapanFlag(hdc, 10, 10);
             EndPaint(hWnd, &ps);
         }
         break;
@@ -177,4 +180,17 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+void drawJapanFlag(HDC hdc, int left, int top) {
+    SelectObject(hdc, GetStockObject(DC_PEN));
+    SelectObject(hdc, GetStockObject(DC_BRUSH));
+    SetDCPenColor(hdc, RGB(0, 0, 0));
+    SetDCBrushColor(hdc, RGB(255, 255, 255));
+    Rectangle(hdc, 0, 0, 400, 266);
+
+    SetDCPenColor(hdc, RGB(188, 0, 45));
+    SetDCBrushColor(hdc, RGB(188, 0, 45));
+    Ellipse(hdc, 120, 53, 160 + 120, 160 + 53);
+
 }
